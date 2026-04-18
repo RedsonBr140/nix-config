@@ -42,6 +42,13 @@
         realHostname = "ntl-wks-0102-linux";
         homeModule = ./home/redson/profiles/workstation.nix;
       };
+      laptop = mkHost {
+        name = "laptop";
+        system = "x86_64-linux";
+        realHostname = "r2d2";
+        # FIXME: Should begin using the real profile.
+        homeModule = ./home/redson/profiles/workstation.nix;
+      };
     };
    };
 }
