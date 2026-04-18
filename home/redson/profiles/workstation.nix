@@ -1,25 +1,33 @@
 { config, pkgs, ... }:
 
 {
-  home.username = "redson";
-  home.homeDirectory = "/home/redson";
+  imports = [
+    ../modules/common/base.nix
+    ../modules/desktop/hyprland_cfg.nix
+    ../modules/desktop/ironbar.nix
+  ];
+  
 
-  programs.home-manager.enable = true;
+  wayland.windowManager.hyprland.settings.input = {
+        kb_layout = "br";
+        kb_variant = "abnt2";
+        kb_model = "";
+        kb_options = "";
+        kb_rules = "";
+
+        follow_mouse = 1;
+        sensitivity = 0;
+
+        #touchpad = {
+        #  natural_scroll = false;
+        #};
+      };
 
   home.packages = with pkgs; [
     pavucontrol
+    spotify
     mpv
   ];
-
-  programs.git = {
-    enable = true;
-    userName = "Redson";
-    userEmail = "redson@riseup.net";
-    signing = {
-      key = "A55CD2880240ABD7";
-      signByDefault = true;
-    };
-  };
 
   programs.vscode = {
     enable = true;

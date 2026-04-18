@@ -2,16 +2,20 @@
   description = "NixOS Configuration flake to manage all of my machines";
 
   inputs = {
-    # NixOS official package source, using the nixos-25.11 branch here
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-25.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    ironbar = {
+    url = "github:JakeStanger/ironbar";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
     home-manager = {
-      url = "github:nix-community/home-manager/release-25.11";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = inputs@{ self, nixpkgs, home-manager, ... }:
+  outputs = inputs@{ self, nixpkgs, home-manager, ironbar, ... }:
   let mkHost = { name, system, realHostname, homeModule }: nixpkgs.lib.nixosSystem {
     inherit system;
 
@@ -19,6 +23,11 @@
 
     modules = [
       ./hosts/${name}
+      ({ ... }: {
+        nixpkgs.overlays = [
+            (import ./overlays/spotify-adblock.nix)
+        ];
+      })
       {
         networking.hostName = realHostname;
       }
